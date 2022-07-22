@@ -5,11 +5,13 @@ import {
   getSearchResults,
   setSearchBy,
 } from '../store/actions/weatherActions';
-import { saveFavorite, removeFavorite } from '../store/actions/favoriteActions';
+import { saveFavorite, removeFavorite, loadFavorites } from '../store/actions/favoriteActions';
 import { WeatherSearch } from '../cmps/WeatherSearch';
 import { WeatherCard } from '../cmps/WeatherCard/WeatherCard';
 import { utilService } from '../services/util.service';
 import { favoriteService } from '../services/favoriteService';
+import { weatherService } from '../services/weather.service';
+import { DefaultLocation } from '../utils/constants';
 
 export const WeatherApp = ({ match }) => {
   const dispatch = useDispatch();
@@ -22,6 +24,12 @@ export const WeatherApp = ({ match }) => {
   useEffect(() => {
     handleLoad();
   }, [match.params.id]);
+
+  const handleLoad = async () => {
+    await dispatch(loadFavorites());
+    await dispatch(getWeatherByLocation());
+    await findIfCurrLocationIsFav();
+  };
 
   // TODO - why callback (from Robots file)?
   const onSearch = useCallback((txt) => {
@@ -53,11 +61,13 @@ export const WeatherApp = ({ match }) => {
     }
   };
 
-  const handleLoad = async () => {
+  const findIfCurrLocationIsFav = async () => {
     const { id } = match.params;
     let favorite = {};
-    const idx = favorites.findIndex((f) => {
-      return f.location.Key === location.Key;
+    const currLocation = location || DefaultLocation;
+    const currFavorites = await favoriteService.query();
+    const idx = currFavorites.findIndex((f) => {
+      return f.location.Key === currLocation.Key;
     });
     const isFavoriteVal = idx !== -1;
     setIsFavorite(isFavoriteVal);
