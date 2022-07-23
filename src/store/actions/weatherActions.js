@@ -27,6 +27,7 @@ export function getSearchResults() {
       const { searchBy } = getState().weatherModule;
       const searchResults = searchBy ? await weatherService.getSearchResults(searchBy) : [];
       dispatch({ type: 'SET_SEARCH_RESULTS', searchResults });
+      return searchResults;
     } catch (error) {
       console.log("Couldn't get search results: ", error);
       const userMsgTxt = `Could not get search results, see console for details`;

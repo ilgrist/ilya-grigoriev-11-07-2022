@@ -27,8 +27,8 @@ export const WeatherApp = ({ match }) => {
 
   const handleLoad = async () => {
     await dispatch(loadFavorites());
-    await dispatch(getWeatherByLocation());
-    await findIfCurrLocationIsFav();
+    await loadLocationByParams();
+    await findSetIsFavorite();
   };
 
   // TODO - why callback (from Robots file)?
@@ -43,6 +43,7 @@ export const WeatherApp = ({ match }) => {
 
   const onSelectLocation = (location) => {
     dispatch(getWeatherByLocation(location));
+    dispatch(setSearchBy(null));
   };
 
   const onToggleIsFavorite = () => {
@@ -61,16 +62,9 @@ export const WeatherApp = ({ match }) => {
     }
   };
 
-  const findIfCurrLocationIsFav = async () => {
+  const loadLocationByParams = async () => {
     const { id } = match.params;
     let favorite = {};
-    const currLocation = location || DefaultLocation;
-    const currFavorites = await favoriteService.query();
-    const idx = currFavorites.findIndex((f) => {
-      return f.location.Key === currLocation.Key;
-    });
-    const isFavoriteVal = idx !== -1;
-    setIsFavorite(isFavoriteVal);
     try {
       favorite = id ? await favoriteService.getById(id) : favoriteService.getEmptyFavorite();
     } catch (err) {
@@ -80,6 +74,16 @@ export const WeatherApp = ({ match }) => {
         ? dispatch(getWeatherByLocation(favorite.location))
         : dispatch(getWeatherByLocation());
     }
+  };
+
+  const findSetIsFavorite = async () => {
+    const currLocation = location || DefaultLocation;
+    const currFavorites = await favoriteService.query();
+    const idx = currFavorites.findIndex((f) => {
+      return f.location.Key === currLocation.Key;
+    });
+    const isFavoriteVal = idx !== -1;
+    setIsFavorite(isFavoriteVal);
   };
 
   return (

@@ -9,9 +9,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const dispatch = useDispatch();
-  dispatch(loadFavorites());
-  dispatch(getWeatherByLocation());
+  // const dispatch = useDispatch();
+  // dispatch(loadFavorites());
+  // dispatch(getWeatherByLocation());
 
   return (
     <Router>

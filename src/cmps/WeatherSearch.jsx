@@ -7,29 +7,29 @@ export const WeatherSearch = ({ searchResults, onSearch, onSelectLocation }) => 
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    validate(txt);
-  }, [txt]);
+  // useEffect(() => {
+  //   validate(txt);
+  // }, [txt]);
 
   const updateInput = (ev) => {
-    if (ev) return setTxt(ev.target.value);
-  };
-
-  const validate = (txt) => {
-    const reg = new RegExp(/^[a-zA-Z ]*$/g);
-    const isValid = reg.test(txt);
-    if (isValid) {
-      setIsError(false);
-      setErrorMessage('');
-      search();
-    } else {
-      setIsError(true);
-      setErrorMessage('English letters only');
+    if (ev) {
+      const newTxt = ev.target.value;
+      if (isValid(newTxt)) {
+        setTxt(newTxt);
+        setIsError(false);
+        setErrorMessage('');
+        onSearch(txt);
+      } else {
+        setTxt('');
+        setIsError(true);
+        setErrorMessage('English letters only');
+      }
     }
   };
 
-  const search = () => {
-    onSearch(txt);
+  const isValid = (txt) => {
+    const reg = new RegExp(/^[a-zA-Z ]*$/g);
+    return reg.test(txt);
   };
 
   const selectLocation = (ev, selection, reason) => {
