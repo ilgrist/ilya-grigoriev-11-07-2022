@@ -7,10 +7,6 @@ export const WeatherSearch = ({ searchResults, onSearch, onSelectLocation }) => 
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // useEffect(() => {
-  //   validate(txt);
-  // }, [txt]);
-
   const updateInput = (ev) => {
     if (ev) {
       const newTxt = ev.target.value;
@@ -18,7 +14,7 @@ export const WeatherSearch = ({ searchResults, onSearch, onSelectLocation }) => 
         setTxt(newTxt);
         setIsError(false);
         setErrorMessage('');
-        onSearch(txt);
+        onSearch(newTxt);
       } else {
         setTxt('');
         setIsError(true);

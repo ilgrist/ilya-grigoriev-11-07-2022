@@ -32,10 +32,16 @@ export const WeatherApp = ({ match }) => {
   };
 
   // TODO - why callback (from Robots file)?
-  const onSearch = useCallback((txt) => {
+  const onSearch = (txt) => {
+    console.log('app callback:', txt);
     dispatch(setSearchBy(txt));
     dispatch(getSearchResults());
-  }, []);
+  };
+  // const onSearch = useCallback((txt) => {
+  //   console.log('app callback:', txt);
+  //   dispatch(setSearchBy(txt));
+  //   dispatch(getSearchResults());
+  // }, []);
 
   const onSelectString = (searchBy) => {
     if (searchBy) console.log('searchBy:', searchBy);
