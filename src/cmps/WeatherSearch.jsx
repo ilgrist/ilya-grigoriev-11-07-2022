@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-export const WeatherSearch = ({ searchResults, onSearch, onSelectLocation }) => {
+const _WeatherSearch = ({ searchResults, onSearch, onSelectLocation }) => {
   const [txt, setTxt] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -64,3 +64,5 @@ export const WeatherSearch = ({ searchResults, onSearch, onSelectLocation }) => 
     </div>
   );
 };
+
+export const WeatherSearch = React.memo(_WeatherSearch);

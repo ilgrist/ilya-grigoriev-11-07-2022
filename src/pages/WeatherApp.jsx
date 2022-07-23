@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getWeatherByLocation,
@@ -10,10 +10,9 @@ import { WeatherSearch } from '../cmps/WeatherSearch';
 import { WeatherCard } from '../cmps/WeatherCard/WeatherCard';
 import { utilService } from '../services/util.service';
 import { favoriteService } from '../services/favoriteService';
-import { weatherService } from '../services/weather.service';
 import { DefaultLocation } from '../utils/constants';
 
-export const WeatherApp = ({ match }) => {
+const _WeatherApp = ({ match }) => {
   const dispatch = useDispatch();
   const { location, currentConditions, dailyForecast, searchResults } = useSelector(
     (state) => state.weatherModule
@@ -31,26 +30,15 @@ export const WeatherApp = ({ match }) => {
     await findSetIsFavorite();
   };
 
-  // TODO - why callback (from Robots file)?
-  const onSearch = (txt) => {
-    console.log('app callback:', txt);
+  const onSearch = useCallback((txt) => {
     dispatch(setSearchBy(txt));
     dispatch(getSearchResults());
-  };
-  // const onSearch = useCallback((txt) => {
-  //   console.log('app callback:', txt);
-  //   dispatch(setSearchBy(txt));
-  //   dispatch(getSearchResults());
-  // }, []);
+  }, []);
 
-  const onSelectString = (searchBy) => {
-    if (searchBy) console.log('searchBy:', searchBy);
-  };
-
-  const onSelectLocation = (location) => {
+  const onSelectLocation = useCallback((location) => {
     dispatch(getWeatherByLocation(location));
     dispatch(setSearchBy(null));
-  };
+  }, []);
 
   const onToggleIsFavorite = () => {
     setIsFavorite(!isFavorite);
@@ -97,7 +85,6 @@ export const WeatherApp = ({ match }) => {
       <WeatherSearch
         onSearch={utilService.debounce(onSearch)}
         onSelectLocation={onSelectLocation}
-        onSelectString={onSelectString}
         searchResults={searchResults}
       />
       <WeatherCard
@@ -110,3 +97,5 @@ export const WeatherApp = ({ match }) => {
     </div>
   );
 };
+
+export const WeatherApp = React.memo(_WeatherApp);

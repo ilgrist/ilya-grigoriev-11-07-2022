@@ -1,16 +1,21 @@
+import React, { useEffect } from 'react';
 import Card from '@mui/material/Card';
 import { Conditions } from './Conditions';
 import { FavoriteBtn } from './FavoriteBtn';
 import { DailyForecasts } from './DailyForecasts';
 import { WeatherText } from './WeatherText';
 
-export const WeatherCard = ({
+const _WeatherCard = ({
   location,
   currentConditions,
   dailyForecast,
   onToggleIsFavorite,
   isFavorite,
 }) => {
+  useEffect(() => {
+    console.log('rendering card');
+  }, []);
+
   if (!currentConditions && !dailyForecast && !location)
     return <div>No conditions, no forecast</div>;
   return (
@@ -22,3 +27,5 @@ export const WeatherCard = ({
     </Card>
   );
 };
+
+export const WeatherCard = React.memo(_WeatherCard);
